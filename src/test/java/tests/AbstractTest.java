@@ -4,8 +4,8 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.http.ContentType;
 import org.junit.Before;
-
 import static stellarburgers.config.RestConfig.HOST;
+
 
 public abstract class AbstractTest {
     @Before

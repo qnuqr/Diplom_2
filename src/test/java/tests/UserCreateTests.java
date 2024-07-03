@@ -1,19 +1,19 @@
 package tests;
 
 import com.github.javafaker.Faker;
-import org.apache.commons.lang3.RandomStringUtils;
+import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import stellarburgers.model.User;
 import stellarburgers.steps.UserSteps;
-
 import static org.hamcrest.CoreMatchers.is;
 
-public class UserTests extends AbstractTest {
-    private UserSteps userSteps = new UserSteps();
+
+public class UserCreateTests extends AbstractTest {
+    private final UserSteps userSteps = new UserSteps();
     private User user;
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @Before
     public void setUp() {
@@ -24,6 +24,7 @@ public class UserTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Создание юзера")
     public void createUser() {
         userSteps
                 .createUser(user)
@@ -33,6 +34,7 @@ public class UserTests extends AbstractTest {
 
 
     @Test
+    @DisplayName("Создание юзера который уже зарегистрирован")
     public void createUserAlreadyRegistered() {
         user.setEmail("test-data@yandex.ru");
         userSteps
@@ -42,6 +44,7 @@ public class UserTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Создание юзера без почты")
     public void createUserWithoutEmail() {
         user.setEmail("");
         userSteps
@@ -51,6 +54,7 @@ public class UserTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Создание юзера без Имени")
     public void createUserWithoutName() {
         user.setName("");
         userSteps
@@ -60,32 +64,13 @@ public class UserTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Создание юзера без пароля")
     public void createUserWithoutPassword() {
         user.setPassword("");
         userSteps
                 .createUser(user)
                 .statusCode(403)
                 .body("message", is("Email, password and name are required fields"));
-    }
-
-    @Test
-    public void loginUser() {
-        userSteps
-                .createUser(user);
-        userSteps
-                .login(user)
-                .statusCode(200)
-                .body("success", is(true));
-    }
-
-    @Test
-    public void loginWithInvalidUsernameNPassword() {
-        user.setName("cc");
-        user.setPassword("123");
-        userSteps
-                .login(user)
-                .statusCode(401)
-                .body("message", is("email or password are incorrect"));
     }
 
 

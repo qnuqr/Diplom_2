@@ -3,7 +3,6 @@ package stellarburgers.steps;
 import io.qameta.allure.Step;
 import io.restassured.response.ValidatableResponse;
 import stellarburgers.model.User;
-
 import static io.restassured.RestAssured.given;
 import static stellarburgers.Endpoints.*;
 
@@ -35,7 +34,6 @@ public class UserSteps {
                 .delete(DELETE_USER)
                 .then();
     }
-
 
     @Step("Получение токена")
     private static String getToken(User user) {
@@ -97,5 +95,4 @@ public class UserSteps {
                 .patch(UPDATE_USER)
                 .then();
     }
-
 }

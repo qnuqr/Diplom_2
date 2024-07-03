@@ -1,6 +1,7 @@
 package tests;
 
 import com.github.javafaker.Faker;
+import io.qameta.allure.junit4.DisplayName;
 import io.restassured.RestAssured;
 import io.restassured.filter.log.RequestLoggingFilter;
 import io.restassured.filter.log.ResponseLoggingFilter;
@@ -13,10 +14,11 @@ import stellarburgers.model.User;
 import stellarburgers.steps.UserSteps;
 import static org.hamcrest.CoreMatchers.is;
 
+
 public class UserDataChangeTests extends AbstractTest {
-    private UserSteps userSteps = new UserSteps();
+    private final UserSteps userSteps = new UserSteps();
     private User user;
-    private Faker faker = new Faker();
+    private final Faker faker = new Faker();
 
     @Before
     public void setUp() {
@@ -29,6 +31,7 @@ public class UserDataChangeTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Смена почты с токеном")
     public void changeUserEmailTest() {
         String newEmail = faker.internet().emailAddress();
         ValidatableResponse validatableResponse = userSteps
@@ -43,6 +46,7 @@ public class UserDataChangeTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Смена имени с токеном")
     public void changeUserNameTest() {
         String newName = faker.name().firstName();
         ValidatableResponse validatableResponse = userSteps
@@ -57,6 +61,7 @@ public class UserDataChangeTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Смена имени без токена")
     public void changeUserNameWithoutTokenTest() {
         String newName = faker.name().firstName();
         userSteps
@@ -67,6 +72,7 @@ public class UserDataChangeTests extends AbstractTest {
     }
 
     @Test
+    @DisplayName("Смена почты без токена")
     public void changeUserEmailWithoutTokenTest() {
         String newEmail = faker.internet().emailAddress();
         userSteps
@@ -74,6 +80,17 @@ public class UserDataChangeTests extends AbstractTest {
                 .assertThat()
                 .statusCode(401)
                 .body("message", is("You should be authorised"));
+    }
+
+    @Test
+    @DisplayName("Смена почты, на почту которая уже используется")
+    public void changeUserEmailExistTest() {
+        String email = "awd@hk.ru";
+        userSteps
+                .userEmailEdit(user, email)
+                .assertThat()
+                .statusCode(403)
+                .body("message", is("User with such email already exists"));
     }
 
     @After

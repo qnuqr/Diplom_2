@@ -1,16 +1,22 @@
 package stellarburgers.steps;
 import static stellarburgers.Endpoints.*;
-
 import io.qameta.allure.Step;
 import io.restassured.http.ContentType;
 import io.restassured.response.ValidatableResponse;
-
 import java.util.List;
 import java.util.Map;
-
 import static io.restassured.RestAssured.given;
 
 public class OrderSteps {
+
+    @Step("Получение списка ингредиентов")
+    public ValidatableResponse getIngredients() {
+        return given()
+                .contentType(ContentType.JSON)
+                .when()
+                .get(GET_INGREDIENTS)
+                .then();
+    }
 
     @Step("Создание заказа с авторизацией")
     public ValidatableResponse createOrderAuthorized(String accessToken, List<String> ingredients) {
@@ -64,9 +70,5 @@ public class OrderSteps {
                 .get(GET_USER_ORDERS)
                 .then();
     }
-
-
-
-
 
 }
