@@ -47,8 +47,8 @@ public class GetUserOrderTests extends  AbstractTest {
                 .assertThat()
                 .statusCode(200)
                 .body("success", is(true));
-        String firstIngredientId = ingredientsResponse.extract().path("data[0]._id"); // Извлечение id нужных ингредиентов
-        String secondIngredientId = ingredientsResponse.extract().path("data[4]._id");
+        String firstIngredientId = ingredientsResponse.extract().path("data[2]._id"); // Извлечение id нужных ингредиентов
+        String secondIngredientId = ingredientsResponse.extract().path("data[6]._id");
         List<String> ingredientsList = List.of(firstIngredientId, secondIngredientId); // Создание списка id ингредиентов
         orderSteps
                 .createOrderAuthorized(token, (ingredientsList));
