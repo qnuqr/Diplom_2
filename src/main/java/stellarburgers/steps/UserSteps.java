@@ -11,10 +11,13 @@ public class UserSteps {
     @Step("Создание пользователя")
     public ValidatableResponse createUser(User user) {
         return given()
+                .log().all() // Логируем все данные запроса
                 .body(user)
                 .when()
                 .post(REGISTER_USER)
-                .then();
+                .then()
+                .log().all(); // Логируем все данные ответа
+
     }
 
     @Step("Авторизация юзера")
@@ -29,7 +32,7 @@ public class UserSteps {
     @Step("Удаление юзера")
     public ValidatableResponse deleteUser(User user) {
         return given()
-                .pathParam("accessToken", user.getAccessToken())
+                .header("accessToken", user.getAccessToken())
                 .when()
                 .delete(DELETE_USER)
                 .then();

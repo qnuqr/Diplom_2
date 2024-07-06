@@ -55,14 +55,13 @@ public class LoginTests extends AbstractTest {
 
     @After
     public void tearDown() {
+        String token = userSteps.login(user)
+                .extract().body().path("accessToken");
+        user.setAccessToken(token);
+
         if (user.getAccessToken() != null) {
-            String token = userSteps.login(user)
-                    .extract().body().path("accessToken");
-            user.setAccessToken(token);
-            userSteps.
-                    deleteUser(user);
+            userSteps.deleteUser(user);
         }
     }
-
 
 }

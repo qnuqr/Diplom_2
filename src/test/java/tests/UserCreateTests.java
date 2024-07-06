@@ -36,7 +36,10 @@ public class UserCreateTests extends AbstractTest {
     @Test
     @DisplayName("Создание юзера который уже зарегистрирован")
     public void createUserAlreadyRegistered() {
-        user.setEmail("test-data@yandex.ru");
+        userSteps
+                .createUser(user)
+                .statusCode(200)
+                .body("success", is(true));
         userSteps
                 .createUser(user)
                 .statusCode(403)
@@ -76,12 +79,12 @@ public class UserCreateTests extends AbstractTest {
 
     @After
     public void tearDown() {
+        String token = userSteps.login(user)
+                .extract().body().path("accessToken");
+        user.setAccessToken(token);
+
         if (user.getAccessToken() != null) {
-            String token = userSteps.login(user)
-                    .extract().body().path("accessToken");
-            user.setAccessToken(token);
-            userSteps.
-                    deleteUser(user);
+            userSteps.deleteUser(user);
         }
     }
 
